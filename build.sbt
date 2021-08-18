@@ -70,6 +70,17 @@ lazy val codacyAnalysisCli = project
     name := "codacy-analysis-cli",
     coverageExcludedPackages := "<empty>;com\\.codacy\\..*CLIError.*",
     Common.dockerSettings,
+    Compile / sourceGenerators += Def.task {
+      val file = (Compile / sourceManaged).value / "com" / "codacy" / "cli" / "Versions.scala"
+      IO.write(
+        file,
+        s"""package com.codacy.cli
+           |object Versions {
+           |  val cliVersion: String = "${version.value}"
+           |}
+           |""".stripMargin)
+      Seq(file)
+    }.taskValue,
     Common.genericSettings,
     Universal / javaOptions ++= Seq("-XX:MinRAMPercentage=60.0", "-XX:MaxRAMPercentage=90.0"),
     publish := (Docker / publish).value,

@@ -2,7 +2,7 @@ import com.typesafe.sbt.packager.Keys._
 import com.typesafe.sbt.packager.docker.DockerPlugin.autoImport.Docker
 import com.typesafe.sbt.packager.docker.{Cmd, CmdLike, DockerAlias}
 import sbt.Keys._
-import sbt.{Def, _}
+import sbt.{Compile, Def, IO, _}
 
 import scala.util.Properties
 

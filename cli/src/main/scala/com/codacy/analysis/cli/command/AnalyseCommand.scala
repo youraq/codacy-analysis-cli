@@ -1,7 +1,6 @@
 package com.codacy.analysis.cli.command
 
 import java.nio.file.Path
-
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
@@ -17,7 +16,7 @@ import com.codacy.analysis.cli.analysis.AnalyseExecutor.{
 import com.codacy.analysis.cli.analysis.{AnalyseExecutor, ExitStatus, ToolSelector}
 import com.codacy.analysis.cli.clients.Credentials
 import com.codacy.analysis.cli.configuration.{CLIConfiguration, Environment}
-import com.codacy.analysis.cli.formatter.Formatter
+import com.codacy.analysis.cli.formatter.{Formatter, Text}
 import com.codacy.analysis.clientapi.tools.ToolsClient
 import com.codacy.analysis.core.analysis.Analyser
 import com.codacy.analysis.core.clients.CodacyClient
@@ -28,6 +27,7 @@ import com.codacy.analysis.core.model._
 import com.codacy.analysis.core.upload.ResultsUploader
 import com.codacy.analysis.core.utils.Logger
 import com.codacy.analysis.core.utils.SeqOps._
+import com.codacy.cli.Versions
 import com.codacy.toolRepository.remote.ToolRepositoryRemote
 import com.codacy.toolRepository.remote.storage.{PatternSpecDataStorage, ToolSpecDataStorage}
 import org.log4s.getLogger
@@ -94,6 +94,10 @@ class AnalyseCommand(analyze: Analyze,
 
   Logger.setLevel(analyze.options.verboseValue)
 
+  if (analyze.options.verboseValue || configuration.analysis.output.format == Text.name) {
+    Console.println(s"Running codacy-analysis-cli version ${Versions.cliVersion}")
+  }
+
   private val logger: org.log4s.Logger = getLogger
 
   def run(): ExitStatus.ExitCode = {
@@ -117,8 +121,7 @@ class AnalyseCommand(analyze: Analyze,
       .fold(
         { _ =>
           Right(())
-        },
-        { repository =>
+        }, { repository =>
           for {
             _ <- validateNoUncommitedChanges(repository, configuration.upload.upload)
             _ <- validateGitCommitUuid(repository, analyze.commitUuid, analyze.skipCommitUuidValidationValue)
@@ -130,8 +133,7 @@ class AnalyseCommand(analyze: Analyze,
     repository.uncommitedFiles.fold(
       { _ =>
         Right(())
-      },
-      { uncommitedFiles =>
+      }, { uncommitedFiles =>
         if (uncommitedFiles.nonEmpty) {
           val error: CLIError = CLIError.UncommitedChanges(uncommitedFiles)
           if (upload) {
