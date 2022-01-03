@@ -6,10 +6,10 @@ import com.codacy.analysis.clientapi.definitions
 import com.codacy.analysis.clientapi.definitions.{PaginationInfo, PatternListResponse, ToolListResponse}
 import com.codacy.analysis.clientapi.tools.{ListPatternsResponse, ListToolsResponse, ToolsClient}
 import com.codacy.analysis.core.model.{AnalyserError, ParameterSpec, PatternSpec, ToolSpec}
-import com.codacy.analysis.core.tools.ToolRepository
-import com.codacy.plugins.api.languages.{Language, Languages}
-import com.codacy.toolRepository.remote.storage.{PatternSpecDataStorage, ToolSpecDataStorage}
-import org.log4s.{Logger, getLogger}
+//import com.codacy.analysis.core.tools.ToolRepository
+//import com.codacy.plugins.api.languages.{Language, Languages}
+//import com.codacy.toolRepository.remote.storage.{PatternSpecDataStorage, ToolSpecDataStorage}
+//import org.log4s.{Logger, getLogger}
 
 import scala.concurrent.duration._
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -20,7 +20,7 @@ class ToolRepositoryRemote(toolsClient: ToolsClient,
                                                                              implicit val mat: Materializer)
     extends ToolRepository {
   private val logger: Logger = getLogger
-
+  AI03 TEST
   private val toolStorageFilename = "tools"
   private val toolStorageInstance = toolsStorage(toolStorageFilename)
 
