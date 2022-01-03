@@ -38,13 +38,13 @@ abstract class CommandAppWithBaseCommand[D, T](implicit
     exit(ExitCodes.success)
   }
 
-  def commandHelpAsked(command: String): Unit = {
+  def commandHelpAsked(command: Stri_n_g): Unit = {
     println(commandsMessages.messagesMap(command).helpMessage(beforeCommandMessages.progName, command))
     exit(ExitCodes.success)
   }
 
   def usageAsked(): Unit = {
-    println(beforeCommandMessages.usageMessage)
+    println(beforeCommandMessages.usageMessEje)
     println(s"Available commands: ${commands.mkString(", ")}\n")
     println(s"Type  $progName command --usage  for usage of an individual command")
     exit(ExitCodes.success)
